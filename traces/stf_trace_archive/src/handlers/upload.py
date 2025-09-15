@@ -29,6 +29,7 @@ class UploadHandler(CommandHandler):
         if (trace_paths and isinstance(trace_paths, str)):
             trace_paths = [trace_paths]
 
+        # TODO is launching errors wihtout trace input on command
         if args.it and not trace_paths:
             trace_paths = FileDialog.select_traces()
             args.trace = trace_paths

@@ -1,4 +1,5 @@
 import hashlib
+import os
 import sys
 import subprocess
 import time
@@ -100,3 +101,62 @@ class Util():
     def write_file_lines(path: Path, lines: List[str]):
         """Write lines to file."""
         path.write_text("\n".join(lines) + "\n")
+
+    @staticmethod
+    def get_git_info(path: str) -> tuple[str, str]:
+        if not os.path.isdir(path):
+            raise ValueError(f"Path does not exist or is not a directory: {path}")
+
+        try:
+            subprocess.run(
+                ["git", "-C", path, "rev-parse", "--is-inside-work-tree"],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            
+            url_result = subprocess.run(
+                ["git", "-C", path, "config", "--get", "remote.origin.url"],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            url = url_result.stdout.strip() if url_result.stdout else None
+
+            sha_result = subprocess.run(
+                ["git", "-C", path, "rev-parse", "HEAD"],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            sha = sha_result.stdout.strip()
+
+            return url, sha
+
+        except subprocess.CalledProcessError:
+            return None, None
+        
+    @staticmethod
+    def ask_yes_no(prompt: str, default: str = None) -> bool:
+        if default not in ("Y", "N", None):
+            raise ValueError("default must be 'Y', 'N', or None")
+
+        while True:
+            if default == "Y":
+                display = "[Y/n]"
+            elif default == "N":
+                display = "[y/N]"
+            else:
+                display = "[y/n]"
+
+            answer = input(f"{prompt} {display}: ").strip().lower()
+
+            if not answer and default:
+                return default == "Y"
+
+            if answer in ("y", "yes"):
+                return True
+            elif answer in ("n", "no"):
+                return False
+            else:
+                print("Please answer 'y' or 'n'.")

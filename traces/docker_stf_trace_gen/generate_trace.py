@@ -4,6 +4,7 @@ import os
 import yaml
 from factories.metadata_factory import MetadataFactory
 from data.metadata import Metadata
+from utils.util import Util
 from utils.trace_generator_arg_parser import parse_args
 from utils.docker_orchestrator import DockerOrchestrator
 from data.consts import Const
@@ -19,11 +20,15 @@ class TraceGenerator():
         args.output = self._get_ouput_path(args)
         docker_paths = self._convert_paths(args)
 
+        print("Tracing workload")
         self._run_trace(args, docker_paths)
+
+        print("Generating trace metadata")
         metadata = self._generate_metadata(args)
         self._save_metadata(args.output, metadata)
 
         if args.dump:
+            print("Creating trace dump")
             dump_path = f"{args.output}.dump"
             self.docker.run_stf_tool("stf_dump", args.output, dump_path)
 
@@ -87,17 +92,16 @@ class TraceGenerator():
 
     def _generate_metadata(self, args: argparse.Namespace) -> Metadata:
         workload_path = args.workload
-        return self.metadataFactory.create(
-            workload_path=workload_path,
-            trace_path=args.output,
-            trace_interval_mode=args.mode,
-            start_instruction=getattr(args, "start_instruction", None),
+        workload_metadata = self.metadataFactory.create_workload(workload_path=workload_path)
+        stf_metadata = self.metadataFactory.create_stf(
+            trace_path=args.output, 
+            interval_mode=args.mode, 
+            start_instruction=getattr(args, "start_instruction", None), 
             num_instructions=getattr(args, "num_instructions", None),
             start_pc=getattr(args, "start_pc", None),
-            pc_threshold=getattr(args, "pc_threshold", None),
-            execution_command=None,
-            description=None,
-        )
+            pc_threshold=getattr(args, "pc_threshold", None))
+        
+        return self.metadataFactory.create(workload_metadata, stf_metadata)
 
     def _save_metadata(self, trace_path: str, metadata: Metadata):
         metadata_path = f"{trace_path}.metadata.yaml"

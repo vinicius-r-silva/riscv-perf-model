@@ -15,6 +15,8 @@ class Workload:
     SHA256: str
     execution_command: Optional[str]
     elf_sections: Dict[str, str]
+    git_repository: Optional[str]
+    git_sha: Optional[str]
 
 
 @dataclass
