@@ -2,12 +2,12 @@
 from typing import Optional
 from data.trace_table_shema import TracesTableSchema
 from data.workload_table_shema import WorkloadsTableSchema
-from data.storages.base import StorageHandler
+from storages.base import StorageHandler
 from data.metadata import Metadata
 from data.trace_data import TraceData
 
 
-class DatabaseExplorer:
+class StorageExplorer:
     def __init__(self, storage: StorageHandler):
         self.storage = storage
 

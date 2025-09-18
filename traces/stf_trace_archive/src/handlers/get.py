@@ -1,12 +1,12 @@
 import argparse
 import os
-from data.database_explorer import DatabaseExplorer
+from storages.storage_explorer import StorageExplorer
 from data.output_path import OutputPaths
-from .base import CommandHandler
+from handlers.base import CommandHandler
 
 
 class GetHandler(CommandHandler):
-    def run(self, args: argparse.Namespace, database_explorer: DatabaseExplorer) -> None:
+    def run(self, args: argparse.Namespace, database_explorer: StorageExplorer) -> None:
         self.explorer = database_explorer
         output_path: OutputPaths = self._get_output_path(args.output)
         if args.trace is not None:

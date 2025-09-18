@@ -1,6 +1,6 @@
 import argparse
-from .base import CommandHandler
-from data.database_explorer import DatabaseExplorer
+from handlers.base import CommandHandler
+from storages.storage_explorer import StorageExplorer
 from utils.ui import print_medatata_details
 
 
@@ -8,7 +8,7 @@ class ListHandler(CommandHandler):
     def run(
         self,
         args: argparse.Namespace,
-        database_explorer: DatabaseExplorer
+        database_explorer: StorageExplorer
     ) -> None:
         self.explorer = database_explorer
         match vars(args):
