@@ -1,4 +1,4 @@
-from data.config import Config
+from data.archive_config import ArchiveConfig
 from storages.storage_type_map import STORAGE_TYPE_MAP
 from storages.storage_explorer import StorageExplorer
 from utils.cli_parser import parseArgs
@@ -18,7 +18,7 @@ def main():
         'setup': setupHandler,
     }
 
-    config: Config = setupHandler.get_config()
+    config: ArchiveConfig = setupHandler.get_config()
     explorer = get_storage(args.storage_name, config)
 
     handler = command_map.get(args.command)
@@ -28,7 +28,7 @@ def main():
         print(f"Unknown command: {args.command}")
 
 
-def get_storage(selected_storage: str, config: Config) -> StorageExplorer:
+def get_storage(selected_storage: str, config: ArchiveConfig) -> StorageExplorer:
     if not selected_storage:
         selected_storage = config.default_storage
 

@@ -6,7 +6,7 @@ import pandas as pd
 import yaml
 
 from data.workload_table_shema import WorkloadsTableSchema
-from data.config import LocalStorageConfig
+from data.archive_config import LocalStorageConfig
 from data.consts import Const
 from data.metadata import Metadata
 from storages.base import StorageHandler

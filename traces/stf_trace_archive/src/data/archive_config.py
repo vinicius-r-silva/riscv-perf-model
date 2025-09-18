@@ -7,16 +7,9 @@ class LocalStorageConfig:
     path: str
 
 
-@dataclass
-class GDriveStorageConfig:
-    path: str
-
-
 CONFIG_TYPE_MAP: Dict[str, Type] = {
     "local-storage": LocalStorageConfig,
-    "gdrive-storage": GDriveStorageConfig,
 }
-
 
 @dataclass
 class StorageConfig:
@@ -36,7 +29,7 @@ class StorageConfig:
 
 
 @dataclass
-class Config:
+class ArchiveConfig:
     storages: List[StorageConfig]
     default_storage: Optional[str]
 
@@ -49,4 +42,4 @@ class Config:
         if 'storages' in data:
             storages = [StorageConfig.from_dict(s) for s in data['storages']]
 
-        return Config(storages=storages, default_storage=data.get('default_storage'))
+        return ArchiveConfig(storages=storages, default_storage=data.get('default_storage'))

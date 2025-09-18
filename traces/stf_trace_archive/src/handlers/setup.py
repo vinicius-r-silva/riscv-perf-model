@@ -3,8 +3,8 @@ import os
 import pathlib
 import yaml
 from dataclasses import asdict
-from data.config import Config, StorageConfig
-from traces.stf_trace_archive.src.storages.storage_type_map import STORAGE_TYPE_MAP
+from data.archive_config import ArchiveConfig, StorageConfig
+from storages.storage_type_map import STORAGE_TYPE_MAP
 from .base import CommandHandler
 
 
@@ -12,8 +12,8 @@ class SetupHandler(CommandHandler):
     def __init__(self):
         config_folder = pathlib.Path(__file__).parent.parent.resolve()
         config_filename = "config.yaml"
-        self._config_path = os.path.join(config_folder, config_filename)
-        self._config: Config = None
+        self._config_path: str = os.path.join(config_folder, config_filename)
+        self._config: ArchiveConfig = None
         self._read_config_file()
         self._complete_config_file()
 
@@ -26,7 +26,7 @@ class SetupHandler(CommandHandler):
             self._set_default_storage(args.set_default_storage)
             self._save_config()
 
-    def get_config(self) -> Config:
+    def get_config(self) -> ArchiveConfig:
         return self._config
 
     def _read_config_file(self) -> None:
@@ -35,7 +35,7 @@ class SetupHandler(CommandHandler):
 
         with open(self._config_path, 'r') as config_file:
             config_dict = yaml.safe_load(config_file)
-            self._config = Config.from_dict(config_dict)
+            self._config = ArchiveConfig.from_dict(config_dict)
 
     def _complete_config_file(self) -> None:
         if not self._config or not self._config.storages:
@@ -69,7 +69,7 @@ class SetupHandler(CommandHandler):
             type=storage_type, name=storage_name, config=storage_specific_config)
 
         if not self._config:
-            self._config = Config(
+            self._config = ArchiveConfig(
                 storages=[storage_config], default_storage=storage_name)
         elif not self._config.storages:
             self._config.storages = [storage_config]
