@@ -7,8 +7,14 @@ class LocalStorageConfig:
     path: str
 
 
+@dataclass
+class GDriveStorageConfig:
+    path: str
+
+
 CONFIG_TYPE_MAP: Dict[str, Type] = {
     "local-storage": LocalStorageConfig,
+    "gdrive-storage": GDriveStorageConfig,
 }
 
 

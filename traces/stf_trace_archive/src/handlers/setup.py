@@ -4,7 +4,7 @@ import pathlib
 import yaml
 from dataclasses import asdict
 from data.config import Config, StorageConfig
-from data.storage_type_map import STORAGE_TYPE_MAP
+from traces.stf_trace_archive.src.storages.storage_type_map import STORAGE_TYPE_MAP
 from .base import CommandHandler
 
 

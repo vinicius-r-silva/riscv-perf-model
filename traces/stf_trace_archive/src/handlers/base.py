@@ -1,10 +1,9 @@
-from abc import ABC, abstractmethod
 import argparse
-
-from data.database_explorer import DatabaseExplorer
+from abc import ABC, abstractmethod
+from storages.storage_explorer import StorageExplorer
 
 
 class CommandHandler(ABC):
     @abstractmethod
-    def run(self, args: argparse.Namespace, database_explorer: DatabaseExplorer) -> None:
+    def run(self, args: argparse.Namespace, database_explorer: StorageExplorer) -> None:
         raise NotImplementedError("This method should be overridden by subclasses.")

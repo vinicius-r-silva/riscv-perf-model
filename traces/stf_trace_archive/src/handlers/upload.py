@@ -1,7 +1,7 @@
 import argparse
 import os
 from tkinter.filedialog import FileDialog
-from data.database_explorer import DatabaseExplorer
+from storages.storage_explorer import StorageExplorer
 from data.consts import Const
 from .base import CommandHandler
 from utils.metadata_parser import MetadataParser
@@ -13,7 +13,7 @@ from data.trace_data import TraceData
 class UploadHandler(CommandHandler):
     _metadata_file_suffix = ".metadata.yaml"
 
-    def run(self, args: argparse.Namespace, database_explorer: DatabaseExplorer):
+    def run(self, args: argparse.Namespace, database_explorer: StorageExplorer):
         self.explorer = database_explorer
         traces = self._get_arg_traces(args)
         self._validate_traces(traces)
